@@ -1,0 +1,10 @@
+{
+  "name": "mvf",
+  "version": "0.0.1",
+  "license": "MIT",
+  "description": "Moves files and directories (to tmp/) instead of `rm -rf`-ing them",
+  "scripts": {
+    "build": "esy dune build",
+    "dev": "esy b dune exec ./Main.exe"
+  }
+}
