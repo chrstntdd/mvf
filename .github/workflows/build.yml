@@ -1,5 +1,7 @@
 name: Main CI
 
+# bust
+
 on: [push]
 
 jobs:
@@ -39,7 +41,7 @@ jobs:
           key:  ${{ runner.os }}-esy-${{ hashFiles('esy.lock/index.json') }}
           restore-keys: |
             ${{ runner.os }}-esy-
-            
+
       - name: Esy install
         run: esy install
 
