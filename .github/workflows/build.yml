@@ -9,10 +9,17 @@ jobs:
     strategy:
       matrix:
         node-version: [17.x]
+        ocaml-version: ["4.12.0"]
+      
 
     steps:
       - name: Checkout
         uses: actions/checkout@v2
+
+      - name: Use OCaml ${{ matrix.ocaml-version }}
+        uses: avsm/setup-ocaml@v2
+        with:
+          ocaml-version: ${{ matrix.ocaml-version }}
 
       - name: Use Node.js ${{ matrix.node-version }}
         uses: actions/setup-node@v2
@@ -36,4 +43,4 @@ jobs:
         run: pnpm exec esy install && pnpm build
 
       - name: verify build
-        run: if [ ! -x ./_esy/default/build/default/Main.exe ]; then echo "Executable not found"; else echo "Build succeeded ✅"; fi
+        run: if [ ! -x ./_esy/default/build/default/Main.exe ]; then echo "Executable not found" && exit 1; else echo "Build succeeded ✅"; fi
