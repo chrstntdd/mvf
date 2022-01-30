@@ -28,11 +28,14 @@ jobs:
           version: 6.29.0
           run_install: true
 
+      - name: Add esy
+        run: pnpm i --global esy
+
       - name: Bootstrap
-        run: pnpm exec esy 
+        run: esy
 
       - name: Build
-        run: pnpm exec esy dune build
+        run: esy dune build
 
       - name: Verify build
         run: if [ ! -x ./_esy/default/build/default/Main.exe ]; then echo "Executable not found" && exit 1; else echo "Build succeeded ✅"; fi
