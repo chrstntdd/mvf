@@ -1,7 +1,6 @@
 name: Main CI
 
 # Copied from https://github.com/actions/cache/blob/main/examples.md#ocamlreason---esy
-# BUST
 
 on: [push]
 
@@ -40,20 +39,20 @@ jobs:
         uses: actions/cache@v2
         with:
           path: _export
-          key:  ${{ runner.os }}-esy-v1-${{ hashFiles('esy.lock/index.json') }}
+          key:  ${{ runner.os }}-esy-${{ hashFiles('esy.lock/index.json') }}
           restore-keys: |
-            ${{ runner.os }}-esy-v1-
+            ${{ runner.os }}-esy-
 
       - name: install
-        run: pnpm exec esy install
+        run: esy install
       
       - name: Import Cache
         run: |
-          pnpm exec esy import-dependencies _export
+          esy import-dependencies _export
           rm -rf _export
 
       - name: build
-        run: pnpm exec esy dune build
+        run: esy dune build
 
       - name: verify build
         run: if [ ! -x ./_esy/default/build/default/Main.exe ]; then echo "Executable not found" && exit 1; else echo "Build succeeded ✅"; fi
