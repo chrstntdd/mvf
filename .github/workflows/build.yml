@@ -34,11 +34,8 @@ jobs:
           version: 6.29.0
           run_install: true
 
-      - name: Bootstrap esy
-        run: pnpm exec esy install
-
-      - name: Build executable
-        run: pnpm exec esy dune build
+      - name: Bootstrap and build
+        run: pnpm exec esy && pnpm build
 
       - name: verify build
         run: if [ ! -x ./_esy/default/build/default/Main.exe ]; then echo "Executable not found" && exit 1; else echo "Build succeeded ✅"; fi
