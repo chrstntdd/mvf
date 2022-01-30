@@ -5,9 +5,6 @@ on: [push]
 jobs:
   build:
     runs-on: ubuntu-latest
-    defaults:
-      run:
-          working-directory: ./app
 
     strategy:
       matrix:
@@ -19,10 +16,10 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v2
 
-      - name: Use OCaml ${{ matrix.ocaml-version }}
-        uses: ocaml/setup-ocaml@v1.1.11
-        with:
-          ocaml-version: ${{ matrix.ocaml-version }}
+      # - name: Use OCaml ${{ matrix.ocaml-version }}
+      #   uses: ocaml/setup-ocaml@v1.1.11
+      #   with:
+      #     ocaml-version: ${{ matrix.ocaml-version }}
 
       - name: Use Node.js ${{ matrix.node-version }}
         uses: actions/setup-node@v2
@@ -43,7 +40,9 @@ jobs:
           run_install: true
 
       - name: build
-        run: pnpm exec esy install && pnpm build
+        run: pnpm exec esy && pnpm build
+        with: 
+          key: ${{ runner.os }}-${{ hashFiles('esy.json') }}
 
       - name: verify build
         run: if [ ! -x ./app/_esy/default/build/default/Main.exe ]; then echo "Executable not found" && exit 1; else echo "Build succeeded ✅"; fi
