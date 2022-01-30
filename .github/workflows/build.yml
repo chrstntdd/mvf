@@ -42,3 +42,8 @@ jobs:
 
       - name: verify build
         run: if [ ! -x ./_esy/default/build/default/Main.exe ]; then echo "Executable not found" && exit 1; else echo "Build succeeded ✅"; fi
+
+      - uses: actions/upload-artifact@v2
+        with:
+          name: bin-mvf
+          path: ./_esy/default/build/default/Main.exe
