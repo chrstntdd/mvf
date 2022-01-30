@@ -44,8 +44,11 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-esy-v0-
 
+      - name: install
+        run: pnpm exec esy install
+      
       - name: build
-        run: pnpm exec esy && pnpm build
+        run: pnpm exec esy dune build
 
       - name: Import Cache
         run: |
