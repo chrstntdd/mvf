@@ -1,7 +1,5 @@
 name: Main CI
 
-# Copied from https://github.com/actions/cache/blob/main/examples.md#ocamlreason---esy
-
 on: [push]
 
 jobs:
@@ -11,7 +9,7 @@ jobs:
     strategy:
       matrix:
         node-version: [17.x]
-      
+        
     steps:
       - name: Checkout
         uses: actions/checkout@v2
@@ -34,13 +32,14 @@ jobs:
           version: 6.29.0
           run_install: true
 
-      - name: Bootstrap and build
+      - name: build
         run: pnpm exec esy && pnpm build
-
+        
       - name: verify build
         run: if [ ! -x ./_esy/default/build/default/Main.exe ]; then echo "Executable not found" && exit 1; else echo "Build succeeded ✅"; fi
 
-      - uses: actions/upload-artifact@v2
+      - name: Upload binary
+        uses: actions/upload-artifact@v2
         with:
-          name: bin-mvf
+          name: mvf-bin
           path: ./_esy/default/build/default/Main.exe
