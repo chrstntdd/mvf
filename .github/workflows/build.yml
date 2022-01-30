@@ -9,7 +9,7 @@ jobs:
     strategy:
       matrix:
         node-version: [17.x]
-        
+
     steps:
       - name: Checkout
         uses: actions/checkout@v2
@@ -32,17 +32,8 @@ jobs:
           version: 6.29.0
           run_install: true
 
-      - name: Esy bootstrap
-        run: pnpm exec esy install
+      - name: Build
+        run: pnpm exec esy && pnpm build
 
-      - name: Esy build 
-        run: pnpm exec esy dune build
-        
-      # - name: verify build
-      #   run: if [ ! -x ./_esy/default/build/default/Main.exe ]; then echo "Executable not found" && exit 1; else echo "Build succeeded ✅"; fi
-
-      - name: Upload binary
-        uses: actions/upload-artifact@v2
-        with:
-          name: mvf-bin
-          path: ./_esy/default/build/default/Main.exe
+      - name: Verify build
+        run: if [ ! -x ./_esy/default/build/default/Main.exe ]; then echo "Executable not found" && exit 1; else echo "Build succeeded ✅"; fi
