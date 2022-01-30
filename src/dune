@@ -1,4 +1,4 @@
 (executable
  (name Main)
  (public_name Main.exe)
- (libraries console.lib pastel.lib))
+ (libraries console.lib pastel.lib rely.lib))
