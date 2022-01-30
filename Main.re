@@ -6,9 +6,8 @@ let parse_args = () => {
 
 let verify_mods = rgs => {
   let existing_mods = rgs |> List.filter(dir => Sys.file_exists(dir));
-  let missing_mods = rgs |> List.filter(dir => !Sys.file_exists(dir));
 
-  (existing_mods, missing_mods);
+  existing_mods;
 };
 
 let safe_remove = (from, dest) => {
@@ -33,7 +32,7 @@ let mv_to_tmp = entry => {
 };
 
 let main = () => {
-  let (existing, _missing) = parse_args() |> verify_mods;
+  let existing = parse_args() |> verify_mods;
 
   let msg =
     if (existing |> List.length > 0) {
@@ -45,17 +44,9 @@ let main = () => {
       |> ignore;
       Console.log("About to move these modules, cool? [y/n]");
 
-      let line = read_line();
-
-      let confirmation =
-        switch (line) {
-        | "y"
-        | "Y" => Ok()
-        | _ => Error()
-        };
-
-      switch (confirmation) {
-      | Ok(_) =>
+      switch (read_line()) {
+      | "y"
+      | "Y" =>
         Random.self_init();
 
         let rec exec = entries => {
@@ -68,9 +59,11 @@ let main = () => {
             }
           };
         };
+
         exec(existing);
+
         <Pastel bold=true color=Green> "👍 All good" </Pastel>;
-      | Error(_) => <Pastel bold=true color=Cyan> "👋 Take care!" </Pastel>
+      | _ => <Pastel bold=true color=Cyan> "👋 Take care!" </Pastel>
       };
     } else {
       <Pastel bold=true color=Yellow> "No files matched" </Pastel>;
