@@ -33,4 +33,4 @@ jobs:
           run_install: true
 
       - name: build
-        run: pnpm build
+        run: pnpm exec esy install && pnpm build
