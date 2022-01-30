@@ -8,7 +8,7 @@ jobs:
 
     strategy:
       matrix:
-        node-version: [16.x, 17.x]
+        node-version: [17.x]
 
     steps:
       - name: Checkout
@@ -34,3 +34,6 @@ jobs:
 
       - name: build
         run: pnpm exec esy install && pnpm build
+
+      - name: verify build
+        run: if [ ! -x ./_esy/default/build/default/Main.exe ]; then echo "Executable not found"; else echo "Build succeeded ✅"; fi
