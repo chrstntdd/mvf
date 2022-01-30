@@ -31,11 +31,30 @@ jobs:
       - name: Add esy
         run: pnpm i --global esy
 
-      - name: Bootstrap
-        run: esy
+      - name: Restore Cache
+        id: restore-cache
+        uses: actions/cache@v2
+        with:
+          path: _export
+          key:  ${{ runner.os }}-esy-${{ hashFiles('esy.lock/index.json') }}
+          restore-keys: |
+            ${{ runner.os }}-esy-
+            
+      - name: Esy install
+        run: esy install
+
+      - name: Import Cache
+        run: |
+          esy import-dependencies _export
+          rm -rf _export
 
       - name: Build
         run: esy dune build
+
+      - name: Setting dependency cache
+        run: |
+          esy export-dependencies
+        if: steps.restore-cache.outputs.cache-hit != 'true'
 
       - name: Verify build
         run: if [ ! -x ./_esy/default/build/default/Main.exe ]; then echo "Executable not found" && exit 1; else echo "Build succeeded ✅"; fi
