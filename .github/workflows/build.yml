@@ -42,7 +42,7 @@ jobs:
       - name: build
         run: pnpm exec esy && pnpm build
         with: 
-          key: ${{ runner.os }}-${{ hashFiles('esy.json') }}
+          cache-key: ${{ hashFiles('esy.json') }}
 
       - name: verify build
-        run: if [ ! -x ./app/_esy/default/build/default/Main.exe ]; then echo "Executable not found" && exit 1; else echo "Build succeeded ✅"; fi
+        run: if [ ! -x ./_esy/default/build/default/Main.exe ]; then echo "Executable not found" && exit 1; else echo "Build succeeded ✅"; fi
