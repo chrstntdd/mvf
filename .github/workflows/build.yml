@@ -44,15 +44,15 @@ jobs:
             ${{ runner.os }}-esy-
 
       - name: install
-        run: esy install
+        run: pnpm exec esy install
       
       - name: Import Cache
         run: |
-          esy import-dependencies _export
+          pnpm exec esy import-dependencies _export
           rm -rf _export
 
       - name: build
-        run: esy dune build
+        run: pnpm exec esy dune build
 
       - name: verify build
         run: if [ ! -x ./_esy/default/build/default/Main.exe ]; then echo "Executable not found" && exit 1; else echo "Build succeeded ✅"; fi
