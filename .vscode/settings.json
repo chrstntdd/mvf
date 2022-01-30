@@ -1,7 +1,0 @@
-{
-  "ocaml.sandbox": {
-    "kind": "esy",
-    "root": "${workspaceFolder:mnm}"
-  },
-  "editor.formatOnSave": true
-}
