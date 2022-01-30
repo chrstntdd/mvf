@@ -17,9 +17,8 @@ let safe_remove = (from, dest) => {
   };
 };
 
-let mv_to_tmp = entry => {
+let mv_to_tmp = (os_tmp_dir, entry) => {
   let bits = Random.bits() |> Int.to_string;
-  let os_tmp_dir = Filename.get_temp_dir_name();
   let is_file = !Sys.is_directory(entry);
 
   if (is_file) {
@@ -49,11 +48,14 @@ let main = () => {
       | "Y" =>
         Random.self_init();
 
+        let os_tmp_dir = Filename.get_temp_dir_name();
+        let mv = os_tmp_dir |> mv_to_tmp;
+
         let rec exec = entries => {
           switch (entries) {
           | [] => ()
           | [head, ...tail] =>
-            switch (mv_to_tmp(head)) {
+            switch (mv(head)) {
             | Ok () => exec(tail)
             | Error(_) => ()
             }
