@@ -39,10 +39,12 @@ jobs:
           version: 6.28.0
           run_install: true
 
+      - uses: esy/github-action@v1
+        with:
+          cache-key: ${{ hashFiles('esy.lock/index.json') }}
+
       - name: build
-        run: pnpm exec esy && pnpm build
-        with: 
-          cache-key: ${{ hashFiles('esy.json') }}
+        run: pnpm build
 
       - name: verify build
         run: if [ ! -x ./_esy/default/build/default/Main.exe ]; then echo "Executable not found" && exit 1; else echo "Build succeeded ✅"; fi
