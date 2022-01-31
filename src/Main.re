@@ -17,16 +17,16 @@ let safe_remove = (from, dest) => {
   };
 };
 
-let mv_to_tmp = (os_tmp_dir, entry) => {
+let mv_to_tmp = (os_tmp_dir, name) => {
   let bits = Random.bits() |> Int.to_string;
-  let is_file = !Sys.is_directory(entry);
+  let is_file = !Sys.is_directory(name);
 
   if (is_file) {
-    safe_remove(entry, Filename.concat(os_tmp_dir, entry));
+    safe_remove(name, Filename.concat(os_tmp_dir, name));
   } else {
-    let tmp_dir_name = entry ++ "-" ++ bits;
+    let tmp_dir_name = name ++ "-" ++ bits;
     let tmp_dir = Filename.concat(os_tmp_dir, tmp_dir_name);
-    safe_remove(entry, tmp_dir);
+    safe_remove(name, tmp_dir);
   };
 };
 
@@ -48,8 +48,7 @@ let main = () => {
       | "Y" =>
         Random.self_init();
 
-        let os_tmp_dir = Filename.get_temp_dir_name();
-        let mv = os_tmp_dir |> mv_to_tmp;
+        let mv = Filename.get_temp_dir_name() |> mv_to_tmp;
 
         let rec exec = entries => {
           switch (entries) {
