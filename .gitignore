@@ -4,4 +4,4 @@ _build
 _esy
 .bsb.lock
 .merlin
-dune
+_export

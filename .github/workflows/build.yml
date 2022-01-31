@@ -1,0 +1,68 @@
+name: Main CI
+
+on: [push]
+
+jobs:
+  build:
+    runs-on: ${{ matrix.os }}
+
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, macos-latest]
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - name: Use Node.js Current
+        uses: actions/setup-node@v2
+        with:
+          node-version: 17.4.0
+
+      - name: Cache pnpm modules
+        uses: actions/cache@v2
+        with:
+          path: ~/.pnpm-store
+          key: ${{ runner.os }}-${{ hashFiles('**/pnpm-lock.yaml') }}
+          restore-keys: |
+            ${{ runner.os }}-
+
+      - uses: pnpm/action-setup@v2.0.1
+        with:
+          version: 6.29.0
+          run_install: true
+
+      - name: Restore Cache
+        id: restore-cache
+        uses: actions/cache@v2
+        with:
+          path: _export
+          key:  ${{ runner.os }}-esy-cache-${{ hashFiles('esy.lock/index.json') }}
+          restore-keys: |
+            ${{ runner.os }}-esy-cache-
+
+      - name: Esy install
+        run: pnpm exec esy
+
+      - name: Import Cache
+        run: |
+          pnpm exec esy import-dependencies _export
+          rm -rf _export
+
+      - name: Build
+        run: pnpm exec esy dune build
+
+      - name: Setting dependency cache
+        run: |
+          pnpm exec esy export-dependencies
+        if: steps.restore-cache.outputs.cache-hit != 'true'
+
+      - name: Verify build
+        run: if [ ! -x ./_esy/default/build/default/src/Main.exe ]; then echo "Executable not found" && exit 1; else echo "Build succeeded ✅"; fi
+
+      - name: Publish binary
+        uses: actions/upload-artifact@v2
+        with:
+          name: mvf-bin-${{ runner.os }}
+          path: ./_esy/default/build/default/src/Main.exe

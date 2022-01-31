@@ -1,7 +1,5 @@
 {
-  "ocaml.sandbox": {
-    "kind": "esy",
-    "root": "${workspaceFolder:mnm}"
-  },
-  "editor.formatOnSave": true
+  "yaml.schemas": {
+    "https://json.schemastore.org/github-workflow.json": "file:///Users/christian/Development/mvf/.github/workflows/build.yml"
+  }
 }
