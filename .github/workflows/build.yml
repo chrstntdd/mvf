@@ -41,9 +41,9 @@ jobs:
         uses: actions/cache@v2
         with:
           path: _export
-          key:  ${{ runner.os }}-esy-${{ hashFiles('esy.lock/index.json') }}
+          key:  ${{ runner.os }}-esy-cache-${{ hashFiles('esy.lock/index.json') }}
           restore-keys: |
-            ${{ runner.os }}-esy-
+            ${{ runner.os }}-esy-cache-
 
       - name: Esy install
         run: esy
