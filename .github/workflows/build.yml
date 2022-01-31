@@ -59,4 +59,10 @@ jobs:
         if: steps.restore-cache.outputs.cache-hit != 'true'
 
       - name: Verify build
-        run: if [ ! -x ./_esy/default/build/default/Main.exe ]; then echo "Executable not found" && exit 1; else echo "Build succeeded ✅"; fi
+        run: if [ ! -x ./_esy/default/build/default/src/Main.exe ]; then echo "Executable not found" && exit 1; else echo "Build succeeded ✅"; fi
+
+      - name: Publish binary
+        uses: actions/upload-artifact@v2
+        with:
+          name: mvf-bin
+          path: ./_esy/default/build/default/src/Main.exe
