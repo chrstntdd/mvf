@@ -33,9 +33,6 @@ jobs:
           version: 6.29.0
           run_install: true
 
-      - name: Add esy
-        run: pnpm i --global esy
-
       - name: Restore Cache
         id: restore-cache
         uses: actions/cache@v2
@@ -46,19 +43,19 @@ jobs:
             ${{ runner.os }}-esy-cache-
 
       - name: Esy install
-        run: esy
+        run: pnpm exec esy
 
       - name: Import Cache
         run: |
-          esy import-dependencies _export
+          pnpm exec esy import-dependencies _export
           rm -rf _export
 
       - name: Build
-        run: esy dune build
+        run: pnpm exec esy dune build
 
       - name: Setting dependency cache
         run: |
-          esy export-dependencies
+          pnpm exec esy export-dependencies
         if: steps.restore-cache.outputs.cache-hit != 'true'
 
       - name: Verify build
