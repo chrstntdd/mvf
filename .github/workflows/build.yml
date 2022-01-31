@@ -1,12 +1,15 @@
 name: Main CI
 
-# bust
-
 on: [push]
 
 jobs:
   build:
-    runs-on: ubuntu-latest
+    runs-on: ${{ matrix.os }}
+
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, macos-latest, windows-latest]
 
     steps:
       - name: Checkout
@@ -64,5 +67,5 @@ jobs:
       - name: Publish binary
         uses: actions/upload-artifact@v2
         with:
-          name: mvf-bin
+          name: mvf-bin-${{ runner.os }}
           path: ./_esy/default/build/default/src/Main.exe
