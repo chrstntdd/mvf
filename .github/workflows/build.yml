@@ -43,7 +43,7 @@ jobs:
             ${{ runner.os }}-esy-
 
       - name: Esy install
-        run: esy install
+        run: esy
 
       - name: Import Cache
         run: |
