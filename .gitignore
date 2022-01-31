@@ -4,5 +4,4 @@ _build
 _esy
 .bsb.lock
 .merlin
-.vscode
 _export
