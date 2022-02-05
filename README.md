@@ -21,13 +21,7 @@ $ mvf node_modules dist tmp-file.txt
 $ pnpm i --global esy
 ```
 
-2. Add the whole OCaml toolchain for safe measure
-
-- [OCaml@4.12.0](https://ocaml.org/docs/install.html)
-- [opam](https://opam.ocaml.org/)
-- [dune](https://dune.build/install)
-
-3. Bootstrap with `esy`
+2. Bootstrap with `esy`
 
 [install deps and build.](https://esy.sh/docs/en/commands.html#esy)
 
@@ -43,14 +37,14 @@ To emit the executable we use `esy` to run `dune` to get the right resolutions t
 $ esy dune build
 ```
 
-This will compile source into an executable to `./_esy/default/build/default/Main.exe`
+This will compile source into an executable to `./_esy/default/build/default/src/Main.exe` — mirroring the `src` directory structure.
 
 ## Running the executable
 
 For full OS permissions, run the built executable directly instead of using `esy`
 
 ```shell
-$ ./_esy/default/build/default/Main.exe node_modules dist
+$ ./_esy/default/build/default/src/Main.exe node_modules dist
 ```
 
 ## Development
