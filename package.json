@@ -6,5 +6,8 @@
   "scripts": {
     "build": "esy dune build",
     "dev": "esy b dune exec ./Main.exe"
+  },
+  "devDependencies": {
+    "esy": "^0.6.12"
   }
 }

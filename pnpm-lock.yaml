@@ -1,0 +1,15 @@
+lockfileVersion: 5.3
+
+specifiers:
+  esy: ^0.6.12
+
+devDependencies:
+  esy: 0.6.12
+
+packages:
+
+  /esy/0.6.12:
+    resolution: {integrity: sha512-EJAbVSOA+KRAK86ZY3tSZUpbh9cYaUxIITycXFJp9yuH+XAuLrCSdTJsH+wvQniRrzAgUBJ6B2vYC2hFB09lTQ==}
+    hasBin: true
+    requiresBuild: true
+    dev: true

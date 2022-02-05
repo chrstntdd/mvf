@@ -6,9 +6,8 @@ let parse_args = () => {
 
 let verify_mods = rgs => {
   let existing_mods = rgs |> List.filter(dir => Sys.file_exists(dir));
-  let missing_mods = rgs |> List.filter(dir => !Sys.file_exists(dir));
 
-  (existing_mods, missing_mods);
+  existing_mods;
 };
 
 let safe_remove = (from, dest) => {
@@ -18,22 +17,21 @@ let safe_remove = (from, dest) => {
   };
 };
 
-let mv_to_tmp = entry => {
+let mv_to_tmp = (os_tmp_dir, name) => {
   let bits = Random.bits() |> Int.to_string;
-  let os_tmp_dir = Filename.get_temp_dir_name();
-  let is_file = !Sys.is_directory(entry);
+  let is_file = !Sys.is_directory(name);
 
   if (is_file) {
-    safe_remove(entry, Filename.concat(os_tmp_dir, entry));
+    safe_remove(name, Filename.concat(os_tmp_dir, name));
   } else {
-    let tmp_dir_name = entry ++ "-" ++ bits;
+    let tmp_dir_name = name ++ "-" ++ bits;
     let tmp_dir = Filename.concat(os_tmp_dir, tmp_dir_name);
-    safe_remove(entry, tmp_dir);
+    safe_remove(name, tmp_dir);
   };
 };
 
 let main = () => {
-  let (existing, _missing) = parse_args() |> verify_mods;
+  let existing = parse_args() |> verify_mods;
 
   let msg =
     if (existing |> List.length > 0) {
@@ -45,32 +43,28 @@ let main = () => {
       |> ignore;
       Console.log("About to move these modules, cool? [y/n]");
 
-      let line = read_line();
-
-      let confirmation =
-        switch (line) {
-        | "y"
-        | "Y" => Ok()
-        | _ => Error()
-        };
-
-      switch (confirmation) {
-      | Ok(_) =>
+      switch (read_line()) {
+      | "y"
+      | "Y" =>
         Random.self_init();
+
+        let mv = Filename.get_temp_dir_name() |> mv_to_tmp;
 
         let rec exec = entries => {
           switch (entries) {
           | [] => ()
           | [head, ...tail] =>
-            switch (mv_to_tmp(head)) {
+            switch (mv(head)) {
             | Ok () => exec(tail)
             | Error(_) => ()
             }
           };
         };
+
         exec(existing);
+
         <Pastel bold=true color=Green> "👍 All good" </Pastel>;
-      | Error(_) => <Pastel bold=true color=Cyan> "👋 Take care!" </Pastel>
+      | _ => <Pastel bold=true color=Cyan> "👋 Take care!" </Pastel>
       };
     } else {
       <Pastel bold=true color=Yellow> "No files matched" </Pastel>;
