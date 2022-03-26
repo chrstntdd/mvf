@@ -10,12 +10,11 @@ let verify_mods = rgs => {
   existing_mods;
 };
 
-let safe_remove = (from, dest) => {
+let safe_remove = (from, dest) =>
   switch (Sys.rename(from, dest)) {
   | () => Ok()
   | exception (Sys_error(_)) => Error("Unable to move")
   };
-};
 
 let mv_to_tmp = (os_tmp_dir, name) => {
   let bits = Random.bits() |> Int.to_string;
@@ -24,7 +23,7 @@ let mv_to_tmp = (os_tmp_dir, name) => {
   if (is_file) {
     safe_remove(name, Filename.concat(os_tmp_dir, name));
   } else {
-    let tmp_dir_name = name ++ "-" ++ bits;
+    let tmp_dir_name = Filename.dirname(name) ++ "-" ++ bits;
     let tmp_dir = Filename.concat(os_tmp_dir, tmp_dir_name);
     safe_remove(name, tmp_dir);
   };
@@ -37,9 +36,9 @@ let main = () => {
     if (existing |> List.length > 0) {
       /* TODO: Print in a nicer format with icons for noting files and directories */
       existing
-      |> List.map(x => {
+      |> List.map(x =>
            <Pastel underline=true bold=true> x </Pastel> |> Console.log
-         })
+         )
       |> ignore;
       Console.log("About to move these modules, cool? [y/n]");
 
@@ -50,7 +49,7 @@ let main = () => {
 
         let mv = Filename.get_temp_dir_name() |> mv_to_tmp;
 
-        let rec exec = entries => {
+        let rec exec = entries =>
           switch (entries) {
           | [] => ()
           | [head, ...tail] =>
@@ -59,7 +58,6 @@ let main = () => {
             | Error(_) => ()
             }
           };
-        };
 
         exec(existing);
 
