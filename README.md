@@ -52,5 +52,9 @@ $ ./_esy/default/build/default/src/Main.exe node_modules dist
 The following command will execute the program with `esy`, but this is a sandboxed environment and will not allow the program to have filesystem access.
 
 ```shell
-$ esy b dune exec ./Main.exe
+$ esy b dune exec ./src/Main.exe
 ```
+
+## IDE Setup
+
+- [Install the OCaml Platform plugin](https://marketplace.visualstudio.com/items?itemName=ocamllabs.ocaml-platform)
