@@ -23,7 +23,7 @@ let mv_to_tmp = (os_tmp_dir, name) => {
   if (is_file) {
     safe_remove(name, Filename.concat(os_tmp_dir, name));
   } else {
-    let tmp_dir_name = Filename.dirname(name) ++ "-" ++ bits;
+    let tmp_dir_name = Filename.basename(name) ++ "-" ++ bits;
     let tmp_dir = Filename.concat(os_tmp_dir, tmp_dir_name);
     safe_remove(name, tmp_dir);
   };
